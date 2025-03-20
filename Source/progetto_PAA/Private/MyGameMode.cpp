@@ -50,7 +50,13 @@ void AMyGameMode::BeginPlay()
 
         if (CoinWidgetInstance)
         {
-            Cast<UCoinWidget>(CoinWidgetInstance)->SetCoinTossManager(CoinTossManager);
+            // Cast to UCoinWidget and set the CoinTossManager
+            UCoinWidget* CoinWidgetLocal = Cast<UCoinWidget>(CoinWidgetInstance);
+            if (CoinWidgetLocal)
+            {
+                CoinWidgetLocal->SetCoinTossManager(CoinTossManager);
+            }
+            //Cast<UCoinWidget>(CoinWidgetInstance)->SetCoinTossManager(CoinTossManager);
 
             
             CoinWidgetInstance->AddToViewport();
@@ -184,9 +190,9 @@ void AMyGameMode::HandleCoinTossResult(bool bIsPlayerTurnResult)
 
 
     // Remove the coin toss UI
-     if (CoinWidget)
+     if (CoinWidgetInstance)
     {
-        CoinWidget->RemoveFromParent();
+        CoinWidgetInstance->RemoveFromParent();
         UE_LOG(LogTemp, Warning, TEXT("CoinWidget removed from viewport!"));
     }
 
