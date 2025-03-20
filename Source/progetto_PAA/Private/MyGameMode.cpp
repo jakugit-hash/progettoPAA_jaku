@@ -3,8 +3,8 @@
 #include "Sniper.h"
 #include "Brawler.h"
 #include "Kismet/GameplayStatics.h"
-#include "Blueprint/UserWidget.h"
 #include "CoinTossManager.h"
+#include "CoinTossWidget.h"
 
 AMyGameMode::AMyGameMode()
 {
@@ -27,13 +27,13 @@ void AMyGameMode::BeginPlay()
     // Create and display the coin toss UI
     if (CoinTossWidgetClass)
     {
-        CoinTossWidget = CreateWidget<UUserWidget>(GetWorld(), CoinTossWidgetClass);
+        CoinTossWidget = CreateWidget<UCoinTossWidget>(GetWorld(), CoinTossWidgetClass);
         if (CoinTossWidget)
         {
             // Pass the CoinTossManager to the widget
-            UObject* CoinTossManagerObject = Cast<UObject>(CoinTossManager);
-            CoinTossWidget->SetProperty(TEXT("CoinTossManager"), CoinTossManagerObject);
+            CoinTossWidget->SetCoinTossManager(CoinTossManager);
 
+            // Add the widget to the viewport
             CoinTossWidget->AddToViewport();
         }
     }

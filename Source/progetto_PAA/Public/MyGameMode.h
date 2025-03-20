@@ -6,7 +6,7 @@
 
 // Forward declarations
 class ACoinTossManager;
-class UUserWidget;
+class UCoinTossWidget;
 
 UCLASS()
 class PROGETTO_PAA_API AMyGameMode : public AGameModeBase
@@ -44,11 +44,11 @@ private:
 	UPROPERTY()
 	ACoinTossManager* CoinTossManager;
 
-	// UI Widget
+	// Coin Toss Widget
 	UPROPERTY()
-	UUserWidget* CoinTossWidget;
+	UCoinTossWidget* CoinTossWidget;
 
 	// Widget class to use for the coin toss UI
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
-	TSubclassOf<UUserWidget> CoinTossWidgetClass;
+	TSubclassOf<UCoinTossWidget> CoinTossWidgetClass;
 };
