@@ -6,7 +6,7 @@
 
 // Forward declarations
 class ACoinTossManager;
-class UCoinTossWidget;
+class UCoinWidget;
 
 UCLASS()
 class PROGETTO_PAA_API AMyGameMode : public AGameModeBase
@@ -30,7 +30,7 @@ public:
 
 	// Handle coin toss result
 	UFUNCTION()
-	void HandleCoinTossResult(bool bIsPlayerTurn);
+	void HandleCoinTossResult(bool bIsPlayerTurnResult);
 
 private:
 	// Reference to the GridManager
@@ -46,9 +46,9 @@ private:
 
 	// Coin Toss Widget
 	UPROPERTY()
-	UCoinTossWidget* CoinTossWidget;
+	UCoinWidget* CoinWidget;
 
 	// Widget class to use for the coin toss UI
-	UPROPERTY(EditDefaultsOnly, Category = "UI")
-	TSubclassOf<UCoinTossWidget> CoinTossWidgetClass;
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UCoinWidget> CoinWidgetClass;
 };
