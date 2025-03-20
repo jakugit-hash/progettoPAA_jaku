@@ -14,7 +14,14 @@ AMyGameMode::AMyGameMode()
     // Initialize pointers to nullptr
     GridManager = nullptr;
     CoinTossManager = nullptr;
-    CoinWidget = nullptr;
+    CoinWidgetInstance = nullptr;
+   
+    static ConstructorHelpers::FClassFinder<UUserWidget> WidgetBP(TEXT("/Game/WBP_CoinWidget.WBP_CoinWidget_C"));
+    if (WidgetBP.Succeeded())
+    {
+        CoinWidgetClass = WidgetBP.Class;
+        UE_LOG(LogTemp, Warning, TEXT("✅ Blueprint found!"));
+    }
 }
 
 void AMyGameMode::BeginPlay()
@@ -39,27 +46,25 @@ void AMyGameMode::BeginPlay()
     // Create and display the coin toss UI
     if (CoinWidgetClass)
     {
-        CoinWidget = CreateWidget<UCoinWidget>(GetWorld(), CoinWidgetClass);
-        if (CoinWidget)
-        {
-            // Pass the CoinTossManager to the widget
-            CoinWidget->SetCoinTossManager(CoinTossManager);
+        CoinWidgetInstance = CreateWidget<UUserWidget>(GetWorld(), CoinWidgetClass);
 
-            // Add the widget to the viewport
-            CoinWidget->AddToViewport();
-  // Log to verify the widget is created
-            UE_LOG(LogTemp, Warning, TEXT("CoinWidget created and added to viewport!"));
-        }
-else
+        if (CoinWidgetInstance)
         {
-            UE_LOG(LogTemp, Error, TEXT("Failed to create CoinWidget!"));
+            Cast<UCoinWidget>(CoinWidgetInstance)->SetCoinTossManager(CoinTossManager);
+
+            
+            CoinWidgetInstance->AddToViewport();
+            UE_LOG(LogTemp, Warning, TEXT("CoinWidget creato e aggiunto alla viewport!"));
+        }
+        else
+        {
+            UE_LOG(LogTemp, Error, TEXT("Creazione di CoinWidget fallita!"));
         }
     }
     else
     {
-        UE_LOG(LogTemp, Error, TEXT("CoinWidgetClass is not set!"));
+        UE_LOG(LogTemp, Error, TEXT("CoinWidgetClass non è stato settato!"));
     }
-    InitializeGame();
 }
 
 void AMyGameMode::InitializeGame()
@@ -177,6 +182,17 @@ void AMyGameMode::HandleCoinTossResult(bool bIsPlayerTurnResult)
 
     bIsPlayerTurn = bIsPlayerTurnResult;
 
+
+    // Remove the coin toss UI
+     if (CoinWidget)
+    {
+        CoinWidget->RemoveFromParent();
+        UE_LOG(LogTemp, Warning, TEXT("CoinWidget removed from viewport!"));
+    }
+
+    // Initialize the game (spawn units, etc.)
+    InitializeGame();
+    
     if (bIsPlayerTurn)
     {
         StartPlayerTurn();
@@ -186,10 +202,6 @@ void AMyGameMode::HandleCoinTossResult(bool bIsPlayerTurnResult)
         StartAITurn();
     }
 
-    // Remove the coin toss UI
-    if (CoinWidget)
-    {
-        CoinWidget->RemoveFromParent();
-        UE_LOG(LogTemp, Warning, TEXT("CoinWidget removed from viewport!"));
-    }
+    
+
 }

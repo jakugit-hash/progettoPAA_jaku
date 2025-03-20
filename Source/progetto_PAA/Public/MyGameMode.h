@@ -44,11 +44,16 @@ private:
 	UPROPERTY()
 	ACoinTossManager* CoinTossManager;
 
+
+	
 	// Coin Toss Widget
 	UPROPERTY()
-	UCoinWidget* CoinWidget;
+	TSubclassOf<UUserWidget> CoinWidget;
 
 	// Widget class to use for the coin toss UI
-	UPROPERTY(EditAnywhere, Category = "UI")
-	TSubclassOf<UCoinWidget> CoinWidgetClass;
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<UUserWidget> CoinWidgetClass; // La classe del widget (Blueprint)
+	
+	UUserWidget* CoinWidgetInstance; // L'istanza effettiva
+
 };
